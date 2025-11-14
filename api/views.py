@@ -3,12 +3,22 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Post
 from .serializer import PostSerializer
+from datetime import datetime
 
 
 
 class PostListCreateApiView(APIView):
     def get(self, request):
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by("-id")
+        title = request.query_params.get("t", None)
+        if title:
+            posts = posts.filter(title=title)
+        date_obj = request.query_params.get("d", None)
+        print("test", date_obj)
+        if date_obj:
+            filter_date = datetime.strptime(date_obj, "%Y-%m-%d")
+            print(filter_date)
+            posts = posts.filter(created_at__year=filter_date.year, created_at__month=filter_date.month, created_at__day=filter_date.day)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
