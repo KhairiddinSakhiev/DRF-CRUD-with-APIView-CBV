@@ -3,3 +3,5 @@ from .models import *
 
 
 admin.site.register(Post)
+admin.site.register(Book)
+admin.site.register(Review)
