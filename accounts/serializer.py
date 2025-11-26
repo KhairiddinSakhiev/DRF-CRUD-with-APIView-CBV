@@ -31,7 +31,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 
-class LogoutSerializer(serializers.ModelSerializer):
+class LogoutSerializer(serializers.Serializer):
     token = serializers.CharField(write_only = True)
 
 class RefreshTokenSerializer(serializers.Serializer):

@@ -46,9 +46,11 @@ class RefreshTokenAPIView(generics.GenericAPIView):
 
 class LogoutAPIView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
+    serializer_class = LogoutSerializer
     def post(self, request):
-        token = request.data.get("token")
-        if token:
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            token = serializer.validated_data["token"]
             refresh_token = RefreshToken(token)
             refresh_token.blacklist()
             return response.Response("User logged out!", status=status.HTTP_205_RESET_CONTENT)
